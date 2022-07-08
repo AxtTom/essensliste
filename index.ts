@@ -9,6 +9,7 @@ import { MongoClient } from 'mongodb';
     console.log('Connected to DB!');
 
     const essen = mongo.db('website').collection('essen');
+    const fooders = mongo.db('website').collection('fooders');
 
     const app = express()
     .disable('x-powered-by')
@@ -27,8 +28,16 @@ import { MongoClient } from 'mongodb';
         });
     });
 
-    app.post('/api', (req, res) => {
-        essen.insertOne(req.body);
+    app.post('/api', async (req, res) => {
+        if (req.body.pin && req.body.list) {
+            const user = await fooders.findOne({ pin: req.body.pin });
+            if (user?.name) {
+                essen.insertOne({
+                    name: user.name,
+                    list: req.body.list
+                });
+            }
+        } 
         res.end();
     });
 
@@ -38,7 +47,7 @@ import { MongoClient } from 'mongodb';
         res.end();
     });
 
-    app.use('/', express.static('html'));
+    app.use('/', express.static(`${__dirname}/html`));
 
     server.listen(8999, 'localhost', () => {
         console.log('Server running!');
