@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        const del = () => {
+            fetch('/api', {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pin: document.getElementById('pin').value
+                })  
+            }).then((res) => {
+                window.location.href = '/liste.html';
+            });
+        };
+    </script>
+    <title>Admin</title>
+</head>
+<body>
+    <input id="pin" type="password" placeholder="Pin">
+    <input type="button" value="Delete" onclick="del();">
+</body>
+</html>

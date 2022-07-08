@@ -32,9 +32,19 @@ import { MongoClient } from 'mongodb';
         res.end();
     });
 
+    app.delete('/api', (req, res) => {
+        if (req.body.pin && req.body.pin == '1517')
+        essen.deleteMany({});
+        res.end();
+    });
+
     app.use('/', express.static('html'));
 
     server.listen(8999, 'localhost', () => {
         console.log('Server running!');
-    })
+    });
+
+    process.on('uncaughtException', (err) => {
+        console.error(err);
+    });
 })();

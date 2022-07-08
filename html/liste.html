@@ -7,15 +7,36 @@
             fetch('/api')
             .then(res => res.json())
             .then(data => {
+                let map = new Map();
                 const list = document.getElementById('bestellungen');
 
                 data.forEach(bestellung => {
                     const h = document.createElement('h3');
                     h.innerText = bestellung.name;
                     list.appendChild(h);
-                });
-                
 
+                    const essensliste = document.createElement('ul');
+                    bestellung.list.forEach(essen => {
+                        const item = document.createElement('li');
+                        item.innerText = `${essen.name} x${essen.count}`;
+                        essensliste.appendChild(item);
+                        if (map.has(essen.name)) map.set(essen.name, parseInt(map.get(essen.name)) + parseInt(essen.count));
+                        else map.set(essen.name, essen.count);
+                    });
+                    list.appendChild(essensliste);
+                });
+
+                const gesamt = document.getElementById('gesamt');
+                const h = document.createElement('h3');
+                h.innerText= 'Gesamt';
+                gesamt.appendChild(h);
+                const items = document.createElement('ul');
+                map.forEach((value, key) => {
+                    const li = document.createElement('li');
+                    li.innerText = `${key} x${value}`;
+                    items.appendChild(li);
+                });
+                gesamt.append(items);
             })
         }
     </script>
@@ -23,6 +44,7 @@
 </head>
 <body>
     <h1>Liste</h1>
+    <div id="gesamt"></div>
     <div id="bestellungen"></div>
 </body>
 </html>
