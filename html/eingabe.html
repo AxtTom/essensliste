@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        let count = 0;
+
+        const addInput = () => {
+            count++;
+            let list = document.getElementById('bestellungen');
+
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = `Bestellung ${count}`;
+            input.className = 'bestellung';
+            input.oninput = () => {
+                input.oninput = null;
+                addInput();
+            }
+            list.appendChild(input);
+            
+            let number = document.createElement('input');
+            number.type = 'number';
+            number.value = 1;
+            number.className = 'bestellung';
+            list.appendChild(number);
+
+            list.appendChild(document.createElement('br'));
+        };
+
+        window.onload = () => {
+            addInput();
+        };
+
+        const send = () => {
+            const inputs = document.getElementsByClassName('bestellung');
+            let list = [];
+            for (let i = 0; i < inputs.length - 2; i += 2) {
+                list.push({
+                    name: inputs.item(i).value,
+                    count: inputs.item(i + 1).value
+                });
+            }
+            console.log(list);
+            fetch('/api', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('name').value,
+                    list
+                })  
+            }).then((res) => {
+                window.location.href = '/';
+            });
+        };
+    </script>
+    <title>Eingabe</title>
+</head>
+<body>
+    <h1>Eingabe</h1>
+    <input id="name" type="text" placeholder="Name"> <br>
+    <br>
+    <div id="bestellungen"></div>
+    <br>
+    <input type="button" value="Senden" onclick="send()">
+</body>
+</html>

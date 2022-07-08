@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        window.onload = () => {
+            fetch('/api')
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('bestellungen');
+
+                data.forEach(bestellung => {
+                    const h = document.createElement('h3');
+                    h.innerText = bestellung.name;
+                    list.appendChild(h);
+                });
+                
+
+            })
+        }
+    </script>
+    <title>Liste</title>
+</head>
+<body>
+    <h1>Liste</h1>
+    <div id="bestellungen"></div>
+</body>
+</html>
