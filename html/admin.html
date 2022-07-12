@@ -17,11 +17,28 @@
                 window.location.href = '/liste.html';
             });
         };
+        const add = () => {
+            fetch('/api', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pin: document.getElementById('pin').value,
+                    username: document.getElementById('username').value,
+                    userid: document.getElementById('userid').value
+                })  
+            }).then((res) => {
+                window.location.href = '/liste.html';
+            });
+        };
     </script>
     <title>Admin</title>
 </head>
 <body>
-    <input id="pin" type="password" placeholder="Pin">
+    <input id="pin" type="password" placeholder="Pin"> <br>
     <input type="button" value="Delete" onclick="del();">
+    <input placeholder="Name" id="username" type="text"> <input placeholder="Pin" id="userid" type="password"> <input type="button" value="Add" onclick="add();">
 </body>
 </html>

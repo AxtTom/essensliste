@@ -43,7 +43,17 @@ import { MongoClient } from 'mongodb';
 
     app.delete('/api', (req, res) => {
         if (req.body.pin && req.body.pin == '1517')
-        essen.deleteMany({});
+            essen.deleteMany({});
+        res.end();
+    });
+
+    app.put('/api', (req, res) => {
+        if (req.body.pin && req.body.pin == '1517' && req.body.username && req.body.userid) {
+            fooders.insertOne({
+                pin: req.body.userid,
+                name: req.body.username
+            })
+        }
         res.end();
     });
 
