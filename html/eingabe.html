@@ -104,6 +104,12 @@
                 window.location.href = '/';
             });
         };
+        const inp = () => {
+            const note = document.getElementById('note');
+            if (note.value.split('\n').length > 5) {
+                note.value = note.value.split('\n').slice(0, 5).join('\n');
+            }
+        }
     </script>
     <title>Eingabe</title>
 </head>
@@ -115,7 +121,7 @@
     <div id="bestellungen"></div>
     <br>
     <!-- <input id="note" type="text" placeholder="Notiz"> -->
-    <textarea id="note" placeholder="Notiz"></textarea>
+    <textarea id="note" placeholder="Notiz" oninput="inp();"></textarea>
     <br>
     Betrag: <div id="betrag">0.00€</div>
     <br>
