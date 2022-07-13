@@ -5,24 +5,68 @@
     <script>
         let count = 0;
 
+        const essenListe = [
+            { name: 'Nichts', price: 0 },
+            { name: 'Cordon Bleu', price: 2.5 },
+            { name: 'Curry Wurst', price: 3 },
+            { name: 'Hotdog', price: 3.5 },
+            { name: 'Käse-Ei-Baguette', price: 3 },
+            { name: 'Käse-Leberkäse', price: 1.5 },
+            { name: 'Leberkäse', price: 1.5 },
+            { name: 'Müller-Banane', price: 1.5 },
+            { name: 'Müller-Erdbeere', price: 1.5 },
+            { name: 'Müller-Haselnuss', price: 1.5 },
+            { name: 'Müller-Pistazie', price: 1.5 },
+            { name: 'Müller-Schokolade', price: 1.5 },
+            { name: 'Müller-Vanille', price: 1.5 },
+            { name: 'Redbull', price: 2.2 },
+            { name: 'Redbull-Grün', price: 2.2 },
+            { name: 'Redbull-Orange', price: 2.2 },
+            { name: 'Salami-Baguette', price: 3 },
+            { name: 'Schinken-Baguette', price: 3 },
+            { name: 'Schnitzelsandwich', price: 2.5 },
+            { name: 'Tomate-Mozza-Baguette', price: 3 },
+            { name: 'Wurst u. Käse Brötchen', price: 1.5 },
+        ];
+
+        const berechnen = () => {
+            let price = 0;
+            const inputs = document.getElementsByClassName('bestellung');
+            for (let i = 0; i < inputs.length; i += 2) {
+                if (inputs.item(i).value != 'Nichts') {
+                    price += essenListe.find(x => x.name == inputs.item(i).value).price * inputs.item(i + 1).value;
+                }
+            }
+            document.getElementById('betrag').innerText = price.toFixed(2) + '€';
+        }
+
         const addInput = () => {
             count++;
             let list = document.getElementById('bestellungen');
 
-            let input = document.createElement('input');
-            input.type = 'text';
-            input.placeholder = `Bestellung ${count}`;
-            input.className = 'bestellung';
-            input.oninput = () => {
-                input.oninput = null;
+            let select = document.createElement('select');
+            select.className = 'bestellung';
+            essenListe.forEach(e => {
+                let option = document.createElement('option');
+                option.innerText = e.name;
+                select.appendChild(option);
+            });
+            select.onchange = () => {
+                select.onchange = () => {
+                    berechnen();
+                };
+                berechnen();
                 addInput();
-            }
-            list.appendChild(input);
+            };
+            list.appendChild(select);
             
             let number = document.createElement('input');
             number.type = 'number';
             number.value = 1;
             number.className = 'bestellung';
+            number.onchange = () => {
+                berechnen();
+            };
             list.appendChild(number);
 
             list.appendChild(document.createElement('br'));
@@ -35,8 +79,8 @@
         const send = () => {
             const inputs = document.getElementsByClassName('bestellung');
             let list = [];
-            for (let i = 0; i < inputs.length - 2; i += 2) {
-                list.push({
+            for (let i = 0; i < inputs.length; i += 2) {
+                if (inputs.item(i).value != 'Nichts') list.push({
                     name: inputs.item(i).value,
                     count: inputs.item(i + 1).value
                 });
@@ -50,6 +94,7 @@
                 },
                 body: JSON.stringify({
                     pin: document.getElementById('pin').value,
+                    note: document.getElementById('note').value,
                     list
                 })  
             }).then((res) => {
@@ -64,6 +109,11 @@
     <input id="pin" type="password" placeholder="Pin"> <br>
     <br>
     <div id="bestellungen"></div>
+    <br>
+    <!-- <input id="note" type="text" placeholder="Notiz"> -->
+    <textarea id="note" placeholder="Notiz"></textarea>
+    <br>
+    Betrag: <div id="betrag">0.00€</div>
     <br>
     <input type="button" value="Senden" onclick="send()">
 </body>

@@ -22,6 +22,7 @@ import { MongoClient } from 'mongodb';
             res.end(JSON.stringify(data.map(item => {
                 return {
                     name: item.name,
+                    note: item.note,
                     list: item.list
                 }
             })));
@@ -34,6 +35,7 @@ import { MongoClient } from 'mongodb';
             if (user?.name) {
                 essen.insertOne({
                     name: user.name,
+                    note: req.body.note,
                     list: req.body.list
                 });
             }

@@ -18,6 +18,7 @@
             });
         };
         const add = () => {
+            if (document.getElementById('username').value == '' || document.getElementById('userid').value == '') return;
             fetch('/api', {
                 method: 'PUT',
                 headers: {
@@ -30,7 +31,8 @@
                     userid: document.getElementById('userid').value
                 })  
             }).then((res) => {
-                window.location.href = '/liste.html';
+                document.getElementById('username').value = '';
+                document.getElementById('userid').value = '';
             });
         };
     </script>

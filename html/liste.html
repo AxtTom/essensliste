@@ -3,6 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <script>
+        const essenListe = [
+            { name: 'Nichts', price: 0 },
+            { name: 'Cordon Bleu', price: 2.5 },
+            { name: 'Curry Wurst', price: 3 },
+            { name: 'Hotdog', price: 3.5 },
+            { name: 'Käse-Ei-Baguette', price: 3 },
+            { name: 'Käse-Leberkäse', price: 1.5 },
+            { name: 'Leberkäse', price: 1.5 },
+            { name: 'Müller-Banane', price: 1.5 },
+            { name: 'Müller-Erdbeere', price: 1.5 },
+            { name: 'Müller-Haselnuss', price: 1.5 },
+            { name: 'Müller-Pistazie', price: 1.5 },
+            { name: 'Müller-Schokolade', price: 1.5 },
+            { name: 'Müller-Vanille', price: 1.5 },
+            { name: 'Redbull', price: 2.2 },
+            { name: 'Redbull-Grün', price: 2.2 },
+            { name: 'Redbull-Orange', price: 2.2 },
+            { name: 'Salami-Baguette', price: 3 },
+            { name: 'Schinken-Baguette', price: 3 },
+            { name: 'Schnitzelsandwich', price: 2.5 },
+            { name: 'Tomate-Mozza-Baguette', price: 3 },
+            { name: 'Wurst u. Käse Brötchen', price: 1.5 },
+        ];
+
         window.onload = () => {
             fetch('/api')
             .then(res => res.json())
@@ -10,9 +34,18 @@
                 let map = new Map();
                 const list = document.getElementById('bestellungen');
 
+                let total = 0;
+                let note = false;
+
                 data.forEach(bestellung => {
+                    let price = 0;
+                    bestellung.list.forEach(essen => {
+                        price += essenListe.find(x => x.name == essen.name).price * parseInt(essen.count);
+                    });
+                    total += price;
+
                     const h = document.createElement('h3');
-                    h.innerText = bestellung.name;
+                    h.innerText = `${bestellung.name} ${price.toFixed(2)}€`;
                     list.appendChild(h);
 
                     const essensliste = document.createElement('ul');
@@ -24,11 +57,24 @@
                         else map.set(essen.name, essen.count);
                     });
                     list.appendChild(essensliste);
+                    if (bestellung.note && bestellung.note != '') {
+                        note = true;
+                        const table = document.createElement('table');
+                        const td = document.createElement('tr');
+                        const tr0 = document.createElement('td');
+                        const tr1 = document.createElement('td');
+                        tr0.innerText = 'Notiz: ';
+                        tr1.innerText = bestellung.note;
+                        td.appendChild(tr0);
+                        td.appendChild(tr1);
+                        table.appendChild(td);
+                        list.appendChild(table);
+                    }
                 });
 
                 const gesamt = document.getElementById('gesamt');
                 const h = document.createElement('h3');
-                h.innerText= 'Gesamt';
+                h.innerText= `Gesamt ${total.toFixed(2)}€`;
                 gesamt.appendChild(h);
                 const items = document.createElement('ul');
                 map.forEach((value, key) => {
@@ -36,7 +82,13 @@
                     li.innerText = `${key} x${value}`;
                     items.appendChild(li);
                 });
-                gesamt.append(items);
+                if (note) {
+                    const notiz = document.createElement('div');
+                    notiz.style.fontWeight = 'bold';
+                    notiz.innerText = 'Bitte Notizen beachten!';
+                    gesamt.appendChild(notiz);
+                }
+                gesamt.appendChild(items);
             })
         }
     </script>
