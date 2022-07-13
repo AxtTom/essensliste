@@ -18,6 +18,7 @@ a:hover {
 
 input, textarea, select {
     border: none;
+    font-size: 1.2em;
 }
 
 .number {
