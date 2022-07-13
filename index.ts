@@ -18,7 +18,6 @@ import { MongoClient } from 'mongodb';
 
     app.get('/api', (req, res) => {
         essen.find({}).toArray().then(data => {
-            console.log(data);
             res.end(JSON.stringify(data.map(item => {
                 return {
                     name: item.name,
