@@ -2,6 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <script>
         const del = () => {
             fetch('/api', {
@@ -40,6 +42,7 @@
 </head>
 <body>
     <input id="pin" type="password" placeholder="Pin"> <br>
+    <br>
     <input type="button" value="Delete" onclick="del();"> <br>
     <input placeholder="Name" id="username" type="text"> <input placeholder="Pin" id="userid" type="password"> <input type="button" value="Add" onclick="add();">
 </body>
